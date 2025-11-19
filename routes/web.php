@@ -2,9 +2,31 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\backend\UserController;
+use App\Http\Controllers\backend\ProductController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('dashboard',[DashboardController::class,'index']);
+
+Route::group(['prefix'=>'dashboard'],function(){
+    Route::get('/',[DashboardController::class,'index']);
+
+    Route::group(['prefix'=>'products','as'=>'products.'],function(){
+        Route::get('/',[ProductController::class,'index'])->name('index');
+        Route::get('/create',[ProductController::class,'create'])->name('create');
+        Route::get('/edit/{id}',[ProductController::class,'edit'])->name('edit');
+        Route::get('/destroy/{id}',[ProductController::class,'destroy'])->name('destroy');
+    });
+    Route::group(['prefix'=>'users','as'=>'users.'],function(){
+        Route::get('/',[UserController::class,'index'])->name('index');
+        Route::get('/create',[UserController::class,'create'])->name('create');
+        Route::get('/edit/{id}',[UserController::class,'edit'])->name('edit');
+        Route::get('/destroy/{id}',[UserController::class,'edit'])->name('edit');
+        });
+
+});
+
+
+
