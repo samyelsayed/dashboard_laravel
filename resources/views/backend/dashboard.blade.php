@@ -1,4 +1,4 @@
-@extends('layouts.parent')
+@extends('backend.layouts.parent')
 @section('title','Dashboard')
 @section('content')
         <div class="row">
