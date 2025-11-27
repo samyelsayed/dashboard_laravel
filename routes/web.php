@@ -16,6 +16,8 @@ Route::group(['prefix'=>'dashboard'],function(){
     Route::group(['prefix'=>'products','as'=>'products.'],function(){
         Route::get('/',[ProductController::class,'index'])->name('index');
         Route::get('/create',[ProductController::class,'create'])->name('create');
+        Route::post('/store',[ProductController::class,'store'])->name('store');
+
         Route::get('/edit/{id}',[ProductController::class,'edit'])->name('edit');
         Route::get('/destroy/{id}',[ProductController::class,'destroy'])->name('destroy');
     });

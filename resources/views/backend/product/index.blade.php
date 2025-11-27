@@ -13,6 +13,7 @@
                   <tr>
                     <th>ID</th>
                     <th>Name En</th>
+                    <th>code</th>
                     <th>Price</th>
                     <th>Quantity</th>
                     <th>Status</th>
@@ -21,14 +22,22 @@
                   </tr>
                   </thead>
                   <tbody>
+                    @foreach ($products as $product)
+                        
+                  
                   <tr>
-                    <td>Trident</td>
-                    <td>Trident</td>
-                    <td>Internet </td>
-                    <td>Win 95+</td>
-                    <td> 4</td>
-                    <td>X</td>
+                    <td>{{$product->id}}</td>
+                    <td>{{$product->name_en}}</td>
+                    <td>{{$product->code}}</td>
+                    <td>{{$product->price}}</td>
+                    <td>{{$product->quantity}} </td>
+                    <td class="{{ $product->status == 0 ? 'text-danger' : 'text-success' }}">
+                        {{ $product->status == 0 ? 'Not Active' : 'Active' }}
+                    </td>
+
+                   
                   </tr>
+                    @endforeach
                   </tbody>
 
                 </table>

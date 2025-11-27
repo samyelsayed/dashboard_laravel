@@ -1,7 +1,8 @@
 @extends('backend.layouts.parent')
 @section('title','create product')
 @section('content')
-<form action="" method="post">
+<form action="{{route('products.store')}}" method="post" enctype="multipart/form-data">
+    @csrf
     <div class="form-row">
         <div class="col-6">
             <label for="name_en">Name En</label>
@@ -41,13 +42,21 @@
         <div class="col-4">
             <label for="brand_id">Brands</label>
             <select name="brand_id" id="brand_id" class="form-control">
-                </select>
+                @foreach ($brands as $brand)
+                <option value="{{$brand->id}}">{{$brand->name_en}}</option>
+                    
+                @endforeach
+            </select>
         </div>
 
         <div class="col-4">
             <label for="subcategory_id">Subcategories</label>
-            <select name="subcategory_id" id="subcategory_id" class="form-control">
-                </select>
+            <select name="subcategory_id" id="subcategory_id" class="form-control"  >
+                                @foreach ($subcategories as $subcategorie)
+                <option value="{{$subcategorie->id}}">{{$subcategorie->name_en}}</option>
+                    
+                @endforeach
+            </select>
         </div>
     </div>
     <div class="form-row">
@@ -68,7 +77,7 @@
         </div>
     </div>
 
-    <div class="form-row">
+    <div class="form-row my-3">
         <div class="col-2">
             <button type="submit" class="btn btn-primary">Create</button>
         </div>
