@@ -28,6 +28,24 @@ class ProductController extends Controller
     }
     //كأني بقوله الفريبول الي اسمه ريكويست دا اوجت من كلاس الريكويست وكدا هوا شايل كل البيانات الي جيت في الفورم
             function store(Request $request){
+             $rules= [
+                'name_en'=>['required','string','max:256','min:2'], //بكتب اسم ال انبوت الي انا مسميه في الفورم و بحط الماكسيمم الي انا انا حاطة ف يالدا تا بيز و المينمم ولو مش محددها في الدات ابيز فدي حاجة ترجعلي
+                'name_ar'=>['required','string','max:256','min:2'],
+                'price'=>['required','nunmeric','max:99999.99','min:0.5'],
+                'code'=>['required','integer','digits:5','uniqe:products,code'],
+                'quantity'=>['nullable','integer','max:999','min:1'],  //nullable يعني تقبل انك تكتب فيها null واحنا في الداتا بيز كاتبين ان الديفولت بتاعها 1
+                'desc_en'=>['required','string'],
+                'desc_ar'=>['required','string'],
+                'status'=>['required','string','between:0,1'],
+                'subcategory_id'=>['required','integer','exists:subcategory,id'],  //بقوله ان الساب كاتجوري ايدي ال يهيجيلك لازم ييبقا موجود ف يجدول الصاب كاتجوري في عمود ال اي دي
+                'brand_id'=>['required','integer','exists:brand,id'],
+                'image'=>['required','max:1000','mimes:png,jpg,jpeg']  //ميمز بكتب الاكستنشن المسموح بية للصورة و ماكسيمم بكتب في اقصي حجم ليهها بالكيلو بايت
+
+            ];
+             $request->validate($rules);
+
+
+
                 dd($request->all());  //دي ميثود بتحول الدا تابتاعتي الي راجعه ل اراي //dump and die
                 //form data
                 //validation
