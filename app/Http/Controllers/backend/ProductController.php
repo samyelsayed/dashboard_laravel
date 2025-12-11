@@ -23,9 +23,21 @@ class ProductController extends Controller
             $subcategories = DB::table('subcategories')->select('id','name_en')->Where('status','=',1)->get();
         return view('backend.product.create',compact('brands','subcategories'));
     }
-            function edit(){
-        return view('backend.product.edit');
+
+
+
+
+   function edit($id){
+                $product = DB::table('products')->where('id',$id)->first();
+                $brands = DB::table('brands')->select('*')->get();
+               $subcategories = DB::table('subcategories')->select('id','name_en')->Where('status','=',1)->get();
+        return view('backend.product.edit',compact('product','brands','subcategories');
     }
+
+
+
+
+
     //كأني بقوله الفريبول الي اسمه ريكويست دا اوجت من كلاس الريكويست وكدا هوا شايل كل البيانات الي جيت في الفورم
             function store(Request $request){
              $rules= [
@@ -55,7 +67,7 @@ class ProductController extends Controller
 
                 $photoName = uniqid() . '.' .$request->image->extension(); //هيجيب الاكستنشن بتاع الصورة
                 $request->image->move(public_path('/dist/image/products'),$photoName);   //بكتب المسار اي هرفعه فيه الصورة و الاسم الي هخزن بية الصورة
-                    //البابليك باص دي بتجيب ابسليوت لحد مسار البابليك 
+                    //البابليك باص دي بتجيب ابسليوت لحد مسار البابليك
                     $data =$request->except('_token','image','page');
                     $data['image'] = $photoName;
                 DB::table('products')->insert($data);
