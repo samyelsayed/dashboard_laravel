@@ -36,7 +36,7 @@
             <label for="code">Code</label>
             <input type="number" name="code" id="code" class="form-control" placeholder="" aria-describedby="">
         </div>
-            <div class="col-4"> 
+            <div class="col-4">
         <label for="Quantity">Quantity</label>
         <input type="number" name="quantity" id="Quantity" class="form-control" placeholder="">
            </div>
@@ -57,7 +57,7 @@
             <select name="brand_id" id="brand_id" class="form-control">
                 @foreach ($brands as $brand)
                 <option value="{{$brand->id}}">{{$brand->name_en}}</option>
-                    
+
                 @endforeach
             </select>
         </div>
@@ -67,7 +67,7 @@
             <select name="subcategory_id" id="subcategory_id" class="form-control"  >
                                 @foreach ($subcategories as $subcategorie)
                 <option value="{{$subcategorie->id}}">{{$subcategorie->name_en}}</option>
-                    
+
                 @endforeach
             </select>
         </div>

@@ -1,7 +1,9 @@
 @extends('backend.layouts.parent')
 @section('title','Edit product')
 @section('content')
-<form action="" method="post">
+<form action="{{route('products.update',$product->id)}}" method="post" enctype="multipart/form-data">
+    @csrf
+
     <div class="form-row">
         <div class="col-6">
             <label for="name_en">Name En</label>
@@ -20,11 +22,11 @@
         </div>
         <div class="col-4">
             <label for="code">Code</label>
-            <input type="number" name="code" id="code" class="form-control" placeholder="" aria-describedby="" value="{{$product->code}}>
+            <input type="number" name="code" id="code" class="form-control" placeholder="" aria-describedby="" value="{{$product->code}}">
         </div>
             <div class="col-4">
         <label for="Quantity">Quantity</label>
-        <input type="number" name="quantity" id="Quantity" class="form-control" placeholder="" value="{{$product->quantity}}>
+        <input type="number" name="quantity" id="Quantity" class="form-control" placeholder="" value="{{$product->quantity}}">
            </div>
     </div>
 
@@ -48,10 +50,10 @@
         </div>
 
         <div class="col-4">
-            <label for="subcategory_id">Subcategories</label>
-            <select name="subcategory_id" id="subcategory_id" class="form-control">
+            <label for="subcatgories_id">Subcategories</label>
+            <select name="subcatgories_id" id="subcatgories_id" class="form-control">
                 @foreach ($subcategories as $subcategory)
-                    <option {{$product-> $subcategory_id ==  $subcategory->id? 'selected' : ''}}  value="{{ $subcategory->id }}">{{ $subcategory->name_en }}</option>
+                    <option {{$product->subcatgories_id  ==  $subcategory->id ? 'selected' : ''}}  value="{{ $subcategory->id }}">{{ $subcategory->name_en }}</option>
                 @endforeach
             </select>
         </div>
@@ -75,13 +77,16 @@
         <div class="col-4">
             <img src="{{url('dist/image/products/'.$product->image)}}" alt="{{$product->name_en}}" width="100px" height="100px">
         </div>
-        طلاما قولتله يو ار ال يبقا انا هبدا  من عند فولدر البابليك
+        {{-- طلاما قولتله يو ار ال يبقا انا هبدا  من عند فولدر البابليك --}}
     </div>
 
-    <div class="form-row">
-        <div class="col-2">
-            <button type="submit" class="btn btn-warning">Update</button>
-        </div>
+    <div class="form-row my-3">
+            <div class="div col-2">
+                <button class="btn btn-warning" name="page" value="index">Update</button>
+            </div>
+            <div class="div col-2">
+                <button class="btn btn-dark" name="page" value="back">Update & Return</button>
+            </div>
     </div>
 </form>
 @endsection

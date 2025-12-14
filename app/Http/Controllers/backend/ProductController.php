@@ -31,10 +31,12 @@ class ProductController extends Controller
                 $product = DB::table('products')->where('id',$id)->first();
                 $brands = DB::table('brands')->select('*')->get();
                $subcategories = DB::table('subcategories')->select('id','name_en')->Where('status','=',1)->get();
-        return view('backend.product.edit',compact('product','brands','subcategories');
+        return view('backend.product.edit',compact('product','brands','subcategories'));
     }
-
-
+//الريكويست هيستقبل ايه ريكويست سواء جيت او بوست او اين كان وعلشان هوا كلاس علشان اتعامل معاه لازم اخد منه اوبجكت
+    function update(Request $request , $id){
+dd($request->all());
+    }
 
 
 
@@ -49,7 +51,7 @@ class ProductController extends Controller
                 'desc_en'=>['required','string'],
                 'desc_ar'=>['required','string'],
                 'status'=>['required','string','between:0,1'],
-                'subcatgories_id'=>['required','integer','exists:subcategories,id'],  //بقوله ان الساب كاتجوري ايدي ال يهيجيلك لازم ييبقا موجود ف يجدول الصاب كاتجوري في عمود ال اي دي
+                'subcategories_id'=>['required','integer','exists:subcategories,id'],  //بقوله ان الساب كاتجوري ايدي ال يهيجيلك لازم ييبقا موجود ف يجدول الصاب كاتجوري في عمود ال اي دي
                 'brand_id'=>['required','integer','exists:brands,id'],
                 'image'=>['required','max:1000','mimes:png,jpg,jpeg']  //ميمز بكتب الاكستنشن المسموح بية للصورة و ماكسيمم بكتب في اقصي حجم ليهها بالكيلو بايت
 

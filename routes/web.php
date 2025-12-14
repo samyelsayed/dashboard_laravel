@@ -19,6 +19,7 @@ Route::group(['prefix'=>'dashboard'],function(){
         Route::post('/store',[ProductController::class,'store'])->name('store');
 
         Route::get('/edit/{id}',[ProductController::class,'edit'])->name('edit');
+        Route::post('/update/{id}',[ProductController::class,'update'])->name('update');
         Route::get('/destroy/{id}',[ProductController::class,'destroy'])->name('destroy');
     });
     Route::group(['prefix'=>'users','as'=>'users.'],function(){
