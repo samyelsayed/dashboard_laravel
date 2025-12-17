@@ -72,17 +72,23 @@
             @enderror
             </div>
 
-        <div class="col-4">
-            <label for="subcatgories_id">Subcategories</label>
-            <select name="subcatgories_id" id="subcatgories_id" class="form-control">
-                @foreach ($subcategories as $subcategory)
-                    <option {{$product->subcatgories_id  ==  $subcategory->id ? 'selected' : ''}}  value="{{ $subcategory->id }}">{{ $subcategory->name_en }}</option>
-                @endforeach
-            </select>
-            @error('subcatgories_id')
-                <div class="alert alert-danger mt-1">{{ $message }}</div>
-            @enderror
-        </div>
+            <div class="col-4">
+                <label for="subcategories_id">Subcategories</label>
+
+                <select name="subcategories_id" id="subcategories_id" class="form-control">
+                    @foreach ($subcategories as $subcategory)
+
+                        <option value="{{ $subcategory->id }}"
+                            {{ old('subcategories_id', $product->subcategories_id) == $subcategory->id ? 'selected' : '' }}>
+                            {{ $subcategory->name_en }}
+                        </option>
+                    @endforeach
+                </select>
+
+                @error('subcatgories_id')
+                    <div class="alert alert-danger mt-1">{{ $message }}</div>
+                @enderror
+            </div>
     </div>
     <div class="form-row">
         <div class="col-6">
@@ -124,4 +130,5 @@
             </div>
     </div>
 </form>
+
 @endsection

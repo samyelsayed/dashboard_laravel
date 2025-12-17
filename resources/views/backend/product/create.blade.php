@@ -113,7 +113,7 @@
         {{-- Name En --}}
         <div class="col-6">
             <label for="name_en">Name En</label>
-            <input type="text" name="name_en" id="name_en" class="form-control">
+            <input type="text" name="name_en" id="name_en" class="form-control" value="{{old('name_en')}}">
             @error('name_en')
                 <div class="alert alert-danger mt-1">{{ $message }}</div>
             @enderror
@@ -122,7 +122,7 @@
         {{-- Name Ar --}}
         <div class="col-6">
             <label for="name_ar">Name Ar</label>
-            <input type="text" name="name_ar" id="name_ar" class="form-control">
+            <input type="text" name="name_ar" id="name_ar" class="form-control" value="{{old('name_ar')}}">
             @error('name_ar')
                 <div class="alert alert-danger mt-1">{{ $message }}</div>
             @enderror
@@ -135,7 +135,7 @@
         {{-- Price --}}
         <div class="col-4">
             <label for="price">Price</label>
-            <input type="number" name="price" id="price" class="form-control">
+            <input type="number" name="price" id="price" class="form-control" value="{{old('price')}}">
             @error('price')
                 <div class="alert alert-danger mt-1">{{ $message }}</div>
             @enderror
@@ -144,7 +144,7 @@
         {{-- Code --}}
         <div class="col-4">
             <label for="code">Code</label>
-            <input type="number" name="code" id="code" class="form-control">
+            <input type="number" name="code" id="code" class="form-control" value="{{old('code')}}">
             @error('code')
                 <div class="alert alert-danger mt-1">{{ $message }}</div>
             @enderror
@@ -153,7 +153,7 @@
         {{-- Quantity --}}
         <div class="col-4">
             <label for="quantity">Quantity</label>
-            <input type="number" name="quantity" id="quantity" class="form-control">
+            <input type="number" name="quantity" id="quantity" class="form-control" value="{{old('quantity')}}">
             @error('quantity')
                 <div class="alert alert-danger mt-1">{{ $message }}</div>
             @enderror
@@ -167,8 +167,8 @@
         <div class="col-4">
             <label for="Status">Status</label>
             <select name="status" id="Status" class="form-control">
-                <option value="1">Active</option>
-                <option value="0">Not Active</option>
+                <option {{old('status') == 1 ? 'selected' : '' }} value="1">Active</option>
+                <option {{old('status') ==0 ? 'selected' : '' }}  value="0">Not Active</option>
             </select>
             @error('status')
                 <div class="alert alert-danger mt-1">{{ $message }}</div>
@@ -180,7 +180,7 @@
             <label for="brand_id">Brands</label>
             <select name="brand_id" id="brand_id" class="form-control">
                 @foreach ($brands as $brand)
-                    <option value="{{ $brand->id }}">{{ $brand->name_en }}</option>
+                    <option {{old('brand_id') ==$brand->id ? 'selected' : '' }}  value="{{ $brand->id }}">{{ $brand->name_en }}</option>
                 @endforeach
             </select>
             @error('brand_id')
@@ -191,12 +191,12 @@
         {{-- Subcategory --}}
         <div class="col-4">
             <label for="subcategory_id">Subcategories</label>
-            <select name="subcatgories_id" id="subcatgories_id" class="form-control">
+            <select name="subcategories_id" id="subcategories_id" class="form-control">
                 @foreach ($subcategories as $subcategory)
-                    <option value="{{ $subcategory->id }}">{{ $subcategory->name_en }}</option>
+                    <option {{old('subcategories_id') ==$subcategory->id ? 'selected' : '' }} value="{{ $subcategory->id }}">{{ $subcategory->name_en }}</option>
                 @endforeach
             </select>
-            @error('subcatgories_id')
+            @error('subcategories_id')
                 <div class="alert alert-danger mt-1">{{ $message }}</div>
             @enderror
         </div>
@@ -208,7 +208,7 @@
         {{-- Desc En --}}
         <div class="col-6">
             <label for="desc_en">Desc En</label>
-            <textarea name="desc_en" id="desc_en" cols="30" rows="10" class="form-control"></textarea>
+            <textarea name="desc_en" id="desc_en" cols="30" rows="10" class="form-control">{{old('desc_en"')}}</textarea>
             @error('desc_en')
                 <div class="alert alert-danger mt-1">{{ $message }}</div>
             @enderror
@@ -217,7 +217,7 @@
         {{-- Desc Ar --}}
         <div class="col-6">
             <label for="desc_ar">Desc Ar</label>
-            <textarea name="desc_ar" id="desc_ar" cols="30" rows="10" class="form-control"></textarea>
+            <textarea name="desc_ar" id="desc_ar" cols="30" rows="10" class="form-control">{{old('desc_ar')}}</textarea>
             @error('desc_ar')
                 <div class="alert alert-danger mt-1">{{ $message }}</div>
             @enderror

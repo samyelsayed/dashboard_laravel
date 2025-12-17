@@ -71,7 +71,7 @@ class ProductController extends Controller
                     $data['image'] = $photoName;
                 DB::table('products')->insert($data);
                 if($request->page =='back'){
-                    return redirect()->back(); //يعني النيم متخزن جواها بايك ارجع للصفحة الي كنت
+                    return redirect()->back(); //يعني النيم متخزن جواها باك ارجع للصفحة الي كنت
                 }else{
                     return redirect()->route('products.index');
                 }
@@ -83,20 +83,34 @@ class ProductController extends Controller
                         'name_en'=>['required','string','max:256','min:2'], //بكتب اسم ال انبوت الي انا مسميه في الفورم و بحط الماكسيمم الي انا انا حاطة ف يالدا تا بيز و المينمم ولو مش محددها في الدات ابيز فدي حاجة ترجعلي
                         'name_ar'=>['required','string','max:256','min:2'],
                         'price'=>['required','numeric','max:99999.99','min:0.5'],
-                        'code'=>['required','integer','digits:5',"unique:products,code, $id .id"],  //علشان لما اعمل ابديت ومش عاوز يطلعلي ان الكود مكرر مع انة نفس الكود القديم فبديله القيمة الي لو جتله يعملها اجنور يعني يتخطاها و هيا ف انه عمود
+                        'code'=>['required','integer','digits:5','unique:products,code,' . $id. ',id'],  //علشان لما اعمل ابديت ومش عاوز يطلعلي ان الكود مكرر مع انة نفس الكود القديم فبديله القيمة الي لو جتله يعملها اجنور يعني يتخطاها و هيا ف انه عمود
                         'quantity'=>['nullable','integer','max:999','min:1'],  //nullable يعني تقبل انك تكتب فيها null واحنا في الداتا بيز كاتبين ان الديفولت بتاعها 1
                         'desc_en'=>['required','string'],
                         'desc_ar'=>['required','string'],
-                        'status'=>['required','string','between:0,1'],
+                        'status'=>['required','integer','between:0,1'],
                         'subcategories_id'=>['required','integer','exists:subcategories,id'],  //بقوله ان الساب كاتجوري ايدي ال يهيجيلك لازم ييبقا موجود ف يجدول الصاب كاتجوري في عمود ال اي دي
                         'brand_id'=>['required','integer','exists:brands,id'],
-                        'image'=>['nullable','max:1000','mimes:png,jpg,jpeg']  //ميمز بكتب الاكستنشن المسموح بية للصورة و ماكسيمم بكتب في اقصي حجم ليهها بالكيلو بايت
+                        'image'=>['nullable','image','max:1000','mimes:png,jpg,jpeg']  //ميمز بكتب الاكستنشن المسموح بية للصورة و ماكسيمم بكتب في اقصي حجم ليهها بالكيلو بايت
                     ];
                     $request->validate($rules);
-              // is photo exists=> upload image
-              //علشان اتشك هل اليوزر رفع او عدل الصورة ولا لا بتشك علي كي ال ايمج  كان مكن اعمل كدا من خلا ل فانشكن از ست بس لارافيل فيها هيلبر اسمه هاذ
-              // update database
-              //redirect
+                    // is photo exists=> upload image
+                    //علشان اتشك هل اليوزر رفع او عدل الصورة ولا لا بتشك علي كي ال ايمج  كان مكن اعمل كدا من خلا ل فانشكن از ست بس لارافيل فيها هيلبر اسمه هاذ
+                    $data= $request->except('_token','_method','page','image');
+                    if($request->hasFile('image')){
+                          $photoName = uniqid() . '.' .$request->image->extension();
+                          $request->image->move(public_path('/dist/image/products'),$photoName);
+                          $data['image'] = $photoName;
+                     }
+                    // update database
+                    DB::table('products')
+                    ->where('id',$id)
+                    ->update($data);
+                    //redirect
+                    if($request->page =='back'){
+                    return redirect()->back(); //يعني النيم متخزن جواها باك ارجع للصفحة الي كنت
+                    }else{
+                        return redirect()->route('products.index');
+                    }
             }
 
 }
