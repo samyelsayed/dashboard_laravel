@@ -97,8 +97,14 @@ class ProductController extends Controller
                     //علشان اتشك هل اليوزر رفع او عدل الصورة ولا لا بتشك علي كي ال ايمج  كان مكن اعمل كدا من خلا ل فانشكن از ست بس لارافيل فيها هيلبر اسمه هاذ
                     $data= $request->except('_token','_method','page','image');
                     if($request->hasFile('image')){
+                        $oldPhotoName = DB::table('products')->select('image')->where('id',$id)->first()->image;
+                        $photoPath =public_path('/dist/image/products/');
+                        if(file_exists($photoPath . $oldPhotoName)){  //بتتشك هل الفايل دا موجود ولا لا
+                          unlink($photoPath . $oldPhotoName);  //  بنديها مسار الصورة او الفايل بتقوم مسحاه
+                        }
+                        // dd($oldPhotoName);
                           $photoName = uniqid() . '.' .$request->image->extension();
-                          $request->image->move(public_path('/dist/image/products'),$photoName);
+                          $request->image->move($photoPath,$photoName);
                           $data['image'] = $photoName;
                      }
                     // update database
