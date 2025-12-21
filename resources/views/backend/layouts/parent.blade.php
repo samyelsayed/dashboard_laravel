@@ -28,6 +28,21 @@
     <link rel="stylesheet" href="{{url('plugins/daterangepicker/daterangepicker.css')}}">
     <!-- summernote -->
     <link rel="stylesheet" href="{{url('plugins/summernote/summernote-bs4.min.css')}}">
+        <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+<style>
+/* تصغير حجم الدائرة الخلفية للرقم */
+    .navbar-badge {
+        font-size: .6rem !important; /* تصغير الخط */
+        font-weight: 300 !important;
+        padding: 2px 4px !important; /* تقليل المسافات الداخلية */
+        top: 4px !important; /* ضبط مكانه بالنسبة للأيقونة */
+        right: 4px !important;
+    }
+
+
+    </style>
     @yield('css')
 </head>
 
@@ -162,6 +177,23 @@
                     <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
                         <i class="fas fa-th-large"></i>
                     </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        {{ Auth::user()->name }}
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                            onclick="event.preventDefault();
+                                            document.getElementById('logout-form').submit();">
+                            {{ __('Logout') }}
+                        </a>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </div>
                 </li>
             </ul>
         </nav>
@@ -341,6 +373,8 @@
     <script src="{{url('dist/js/demo.js')}}"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="{{url('dist/js/pages/dashboard.js')}}"></script>
+        <!-- Scripts -->
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
      @yield('js')
 </body>
 

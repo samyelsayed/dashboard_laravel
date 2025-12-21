@@ -21,11 +21,12 @@ class UpdateProductRequest extends FormRequest
      */
     public function rules(): array
     {
+        $productId = $this->route('id');
         return [
                         'name_en'=>['required','string','max:256','min:2'], //بكتب اسم ال انبوت الي انا مسميه في الفورم و بحط الماكسيمم الي انا انا حاطة ف يالدا تا بيز و المينمم ولو مش محددها في الدات ابيز فدي حاجة ترجعلي
                         'name_ar'=>['required','string','max:256','min:2'],
                         'price'=>['required','numeric','max:99999.99','min:0.5'],
-                        'code'=>['required','integer','digits:5','unique:products,code,' . $id. ',id'],  //علشان لما اعمل ابديت ومش عاوز يطلعلي ان الكود مكرر مع انة نفس الكود القديم فبديله القيمة الي لو جتله يعملها اجنور يعني يتخطاها و هيا ف انه عمود
+                        'code'=>['required','integer','digits:5','unique:products,code,' . $productId. ',id'],  //علشان لما اعمل ابديت ومش عاوز يطلعلي ان الكود مكرر مع انة نفس الكود القديم فبديله القيمة الي لو جتله يعملها اجنور يعني يتخطاها و هيا ف انه عمود
                         'quantity'=>['nullable','integer','max:999','min:1'],  //nullable يعني تقبل انك تكتب فيها null واحنا في الداتا بيز كاتبين ان الديفولت بتاعها 1
                         'desc_en'=>['required','string'],
                         'desc_ar'=>['required','string'],
