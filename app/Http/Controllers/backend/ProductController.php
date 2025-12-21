@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers\backend;
   //ال ريكويست هيستقبل ايه ريكويست سواء جيت او بوست او اين كان وعلشان هوا كلاس علشان اتعامل معاه لازم اخد منه اوبجكت
+use App\Http\traits\media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 
 class ProductController extends Controller
+
 {
+    use media;
     function index(){
         $products = DB::table('products')
         ->select('id','name_en','name_ar','price','quantity','status','code','created_at')
@@ -38,22 +43,8 @@ class ProductController extends Controller
 
 
            //كأني بقوله الفريبول الي اسمه ريكويست دا اوجت من كلاس الريكويست وكدا هوا شايل كل البيانات الي جيت في الفورم
-            function store(Request $request){
-             $rules= [
-                'name_en'=>['required','string','max:256','min:2'], //بكتب اسم ال انبوت الي انا مسميه في الفورم و بحط الماكسيمم الي انا انا حاطة ف يالدا تا بيز و المينمم ولو مش محددها في الدات ابيز فدي حاجة ترجعلي
-                'name_ar'=>['required','string','max:256','min:2'],
-                'price'=>['required','numeric','max:99999.99','min:0.5'],
-                'code'=>['required','integer','digits:5','unique:products,code'],
-                'quantity'=>['nullable','integer','max:999','min:1'],  //nullable يعني تقبل انك تكتب فيها null واحنا في الداتا بيز كاتبين ان الديفولت بتاعها 1
-                'desc_en'=>['required','string'],
-                'desc_ar'=>['required','string'],
-                'status'=>['required','string','between:0,1'],
-                'subcategories_id'=>['required','integer','exists:subcategories,id'],  //بقوله ان الساب كاتجوري ايدي ال يهيجيلك لازم ييبقا موجود ف يجدول الصاب كاتجوري في عمود ال اي دي
-                'brand_id'=>['required','integer','exists:brands,id'],
-                'image'=>['required','max:1000','mimes:png,jpg,jpeg']  //ميمز بكتب الاكستنشن المسموح بية للصورة و ماكسيمم بكتب في اقصي حجم ليهها بالكيلو بايت
+            function store(StoreProductRequest $request){
 
-            ];
-             $request->validate($rules);
 
 
 
@@ -64,47 +55,28 @@ class ProductController extends Controller
                 //issert to database
                 //redireect
 
-                $photoName = uniqid() . '.' .$request->image->extension(); //هيجيب الاكستنشن بتاع الصورة
-                $request->image->move(public_path('/dist/image/products'),$photoName);   //بكتب المسار اي هرفعه فيه الصورة و الاسم الي هخزن بية الصورة
+                //upload image
+                $photoName = $thids->uploadPhoto($request->image,'products');
                     //البابليك باص دي بتجيب ابسليوت لحد مسار البابليك
                     $data =$request->except('_token','image','page');
                     $data['image'] = $photoName;
                 DB::table('products')->insert($data);
-                if($request->page =='back'){
-                    return redirect()->back(); //يعني النيم متخزن جواها باك ارجع للصفحة الي كنت
-                }else{
-                    return redirect()->route('products.index');
-                }
+                return $this->redirectAccordingToReruest($request);
     }
             //الريكويست هيستقبل ايه ريكويست سواء جيت او بوست او اين كان وعلشان هوا كلاس علشان اتعامل معاه لازم اخد منه اوبجكت
-            function update(Request $request , $id){
+            function update(UpdateProductRequest $request , $id){
               //validation
-                    $rules= [
-                        'name_en'=>['required','string','max:256','min:2'], //بكتب اسم ال انبوت الي انا مسميه في الفورم و بحط الماكسيمم الي انا انا حاطة ف يالدا تا بيز و المينمم ولو مش محددها في الدات ابيز فدي حاجة ترجعلي
-                        'name_ar'=>['required','string','max:256','min:2'],
-                        'price'=>['required','numeric','max:99999.99','min:0.5'],
-                        'code'=>['required','integer','digits:5','unique:products,code,' . $id. ',id'],  //علشان لما اعمل ابديت ومش عاوز يطلعلي ان الكود مكرر مع انة نفس الكود القديم فبديله القيمة الي لو جتله يعملها اجنور يعني يتخطاها و هيا ف انه عمود
-                        'quantity'=>['nullable','integer','max:999','min:1'],  //nullable يعني تقبل انك تكتب فيها null واحنا في الداتا بيز كاتبين ان الديفولت بتاعها 1
-                        'desc_en'=>['required','string'],
-                        'desc_ar'=>['required','string'],
-                        'status'=>['required','integer','between:0,1'],
-                        'subcategories_id'=>['required','integer','exists:subcategories,id'],  //بقوله ان الساب كاتجوري ايدي ال يهيجيلك لازم ييبقا موجود ف يجدول الصاب كاتجوري في عمود ال اي دي
-                        'brand_id'=>['required','integer','exists:brands,id'],
-                        'image'=>['nullable','image','max:1000','mimes:png,jpg,jpeg']  //ميمز بكتب الاكستنشن المسموح بية للصورة و ماكسيمم بكتب في اقصي حجم ليهها بالكيلو بايت
-                    ];
-                    $request->validate($rules);
+
                     // is photo exists=> upload image
                     //علشان اتشك هل اليوزر رفع او عدل الصورة ولا لا بتشك علي كي ال ايمج  كان مكن اعمل كدا من خلا ل فانشكن از ست بس لارافيل فيها هيلبر اسمه هاذ
                     $data= $request->except('_token','_method','page','image');
                     if($request->hasFile('image')){
                         $oldPhotoName = DB::table('products')->select('image')->where('id',$id)->first()->image;
-                        $photoPath =public_path('/dist/image/products/');
-                        if(file_exists($photoPath . $oldPhotoName)){  //بتتشك هل الفايل دا موجود ولا لا
-                          unlink($photoPath . $oldPhotoName);  //  بنديها مسار الصورة او الفايل بتقوم مسحاه
-                        }
+                        $photoPath =public_path('/dist/image/products/').$oldPhotoName;
+                         $this->deletePhoto($photoPath);
                         // dd($oldPhotoName);
-                          $photoName = uniqid() . '.' .$request->image->extension();
-                          $request->image->move($photoPath,$photoName);
+                        //upload new photo
+                         $photoName = $thids->uploadPhoto($request->image,'products');
                           $data['image'] = $photoName;
                      }
                     // update database
@@ -112,11 +84,27 @@ class ProductController extends Controller
                     ->where('id',$id)
                     ->update($data);
                     //redirect
-                    if($request->page =='back'){
-                    return redirect()->back(); //يعني النيم متخزن جواها باك ارجع للصفحة الي كنت
-                    }else{
-                        return redirect()->route('products.index');
-                    }
+                    return $this->redirectAccordingToReruest($request);
+            }
+
+            function destroy($id){
+                 //drlete photo from folder
+                  $oldPhotoName = DB::table('products')->select('image')->where('id',$id)->first()->image;
+                  $photoPath =public_path('/dist/image/products/').$oldPhotoName;
+                  $this->deletePhoto($photoPath);
+                //delete from database
+                DB::table('products')->where('id',$id)->delete();
+                return redirect()->back()->with('success', 'Product deleted successfully');
+            }
+
+           private function redirectAccordingToReruest($request){
+
+                if($request->page =='back'){         
+                return redirect()->back()->with('success', 'Product updated successfully');
+                    //يعني النيم متخزن جواها باك ارجع للصفحة الي كنت
+                }else{
+                    return redirect()->route('products.index')->with('success', 'Product updated successfully');
+                }
             }
 
 }

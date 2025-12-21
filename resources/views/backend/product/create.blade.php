@@ -95,7 +95,7 @@
             <button type="submit" class="btn btn-primary" name="page" value="index">Create</button>
         </div>
                 <div class="col-2">
-            <button type="submit" class="btn btn-dark" name="page" value="back">Create & return</button>
+@include('backend.includes.message')            <button type="submit" class="btn btn-dark" name="page" value="back">Create & return</button>
         </div>
     </div>
 </form>
@@ -105,6 +105,8 @@
 @section('title','create product')
 @section('content')
 
+
+@include('backend.includes.message')
 <form action="{{route('products.store')}}" method="post" enctype="multipart/form-data">
     @csrf
 

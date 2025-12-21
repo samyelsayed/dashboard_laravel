@@ -20,7 +20,7 @@ Route::group(['prefix'=>'dashboard'],function(){
 
         Route::get('/edit/{id}',[ProductController::class,'edit'])->name('edit');
         Route::put('/update/{id}',[ProductController::class,'update'])->name('update');
-        Route::get('/destroy/{id}',[ProductController::class,'destroy'])->name('destroy');
+        Route::delete('/destroy/{id}',[ProductController::class,'destroy'])->name('destroy');
     });
     Route::group(['prefix'=>'users','as'=>'users.'],function(){
         Route::get('/',[UserController::class,'index'])->name('index');

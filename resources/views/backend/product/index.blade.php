@@ -7,7 +7,9 @@
   <link rel="stylesheet" href="{{url('plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
   <!-- Theme style -->
 @endsection
+
 @section('content')
+@include('backend.includes.message')
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
@@ -37,7 +39,15 @@
                     <td>{{ $product->created_at }}</td>
                     <td>
                        <a href="{{ route('products.edit',$product->id) }}" class="btn btn-warning">Edit</a>
-                       <a href="{{ route('products.destroy',$product->id) }}" class="btn btn-danger">Delete</a>
+                       <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+
+                        <button type="submit" class="btn btn-danger">
+                            Delete
+                        </button>
+                       </form>
+
                     </td>
 
 
