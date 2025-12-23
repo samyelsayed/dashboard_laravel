@@ -10,7 +10,7 @@ Route::get('/', function () {
 });
 
 
-Route::group(['prefix'=>'dashboard'],function(){
+Route::group(['prefix'=>'dashboard','middleware'=>'auth'],function(){
     Route::get('/',[DashboardController::class,'index']);
 
     Route::group(['prefix'=>'products','as'=>'products.'],function(){
