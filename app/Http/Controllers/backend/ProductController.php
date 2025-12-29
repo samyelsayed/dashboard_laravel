@@ -21,6 +21,8 @@ class ProductController extends Controller
         return view('backend.product.index',compact('products'));
         // compact('products') هيحول متغير ل اراي
     }
+
+
         function create(){
             //لو عاوز اجيب بيانات من جدول معين بكتب السطر الي تحت "بكتب اسم الجدول و '*' معناها هات بياناتكل العواميد الي فية ويعدين جيت
             $brands = DB::table('brands')->select('*')->get();
@@ -56,7 +58,7 @@ class ProductController extends Controller
                 //redireect
 
                 //upload image
-                $photoName = $thids->uploadPhoto($request->image,'products');
+                $photoName = $this->uploadPhoto($request->image,'products');
                     //البابليك باص دي بتجيب ابسليوت لحد مسار البابليك
                     $data =$request->except('_token','image','page');
                     $data['image'] = $photoName;
@@ -76,7 +78,7 @@ class ProductController extends Controller
                          $this->deletePhoto($photoPath);
                         // dd($oldPhotoName);
                         //upload new photo
-                         $photoName = $thids->uploadPhoto($request->image,'products');
+                         $photoName = $this->uploadPhoto($request->image,'products');
                           $data['image'] = $photoName;
                      }
                     // update database
@@ -99,7 +101,7 @@ class ProductController extends Controller
 
            private function redirectAccordingToReruest($request){
 
-                if($request->page =='back'){         
+                if($request->page =='back'){
                 return redirect()->back()->with('success', 'Product updated successfully');
                     //يعني النيم متخزن جواها باك ارجع للصفحة الي كنت
                 }else{

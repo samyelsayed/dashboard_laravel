@@ -374,7 +374,7 @@
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="{{url('dist/js/pages/dashboard.js')}}"></script>
         <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
      @yield('js')
 </body>
 

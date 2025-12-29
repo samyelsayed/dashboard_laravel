@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\backend\UserController;
@@ -10,7 +11,7 @@ Route::get('/', function () {
 });
 
 
-Route::group(['prefix'=>'dashboard','middleware'=>'auth'],function(){
+Route::group(['prefix'=>'dashboard','middleware'=>'verified'],function(){
     Route::get('/',[DashboardController::class,'index']);
 
     Route::group(['prefix'=>'products','as'=>'products.'],function(){
@@ -34,6 +35,6 @@ Route::group(['prefix'=>'dashboard','middleware'=>'auth'],function(){
 
 
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
