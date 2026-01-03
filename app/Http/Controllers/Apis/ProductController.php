@@ -33,8 +33,8 @@ class ProductController extends Controller
         $brands = Brand::all();
         $Subcategories = Subcategory::select('id','name_en')->get();
         $products = Product::findOrFail($id);       //لو ما لقاها يرمي ايرور
-        // $products = Product::find($id);   
-        return response()->json(compact('brands', 'Subcategories', 'product'), 200);  
+        // $products = Product::find($id);
+        return response()->json(compact('brands', 'Subcategories', 'product'), 200);
       }        //فايند يعني واحد بس
 
             function store(StoreProductRequest $request){
@@ -57,33 +57,41 @@ class ProductController extends Controller
                 Product::create($data);
                 return response()->json(['success' => true , 'message'=> "product created successfuly"]);
             }
-  
 
-            
+
+
  //الريكويست هيستقبل ايه ريكويست سواء جيت او بوست او اين كان وعلشان هوا كلاس علشان اتعامل معاه لازم اخد منه اوبجكت
-            function update(UpdateProductRequest $request , $id){
-              //validation
+     public function update(UpdateProductRequest $request, $id)
+{
+    // 1. استثناء الصورة مؤقتاً من البيانات
+    $data = $request->except('_method', 'image');
 
-                    // is photo exists=> upload image
-                    //علشان اتشك هل اليوزر رفع او عدل الصورة ولا لا بتشك علي كي ال ايمج  كان مكن اعمل كدا من خلا ل فانشكن از ست بس لارافيل فيها هيلبر اسمه هاذ
-                    $data= $request->except('image');
-                    if($request->hasFile('image')){
-                        $oldPhotoName = Product::find($id)->image;
-                        $photoPath =public_path('/dist/image/products/').$oldPhotoName;
-                         $this->deletePhoto($photoPath);
-                        // dd($oldPhotoName);
-                        //upload new photo
-                         $photoName = $this->uploadPhoto($request->image,'products');
-                          $data['image'] = $photoName;
-                     }
-                    // update database
-                    Product::
-                    // DB::table('products')
-                    where('id',$id)
-                    ->update($data);
-                    //redirect
-                    return response()->json(['success' => true , 'message'=> "product Updated Successfuly"])
-            }
+    // 2. التحقق من وجود صورة جديدة
+    if ($request->hasFile('image')) {
+        // جلب اسم الصورة القديمة من الداتابيز
+        $product = Product::find($id);
+        $oldPhotoName = $product->image;
+
+        // مسار الصورة القديمة على السيرفر
+        $photoPath = public_path('/dist/image/products/') . $oldPhotoName;
+
+        // حذف الصورة القديمة باستخدام الدالة التي أنشأتها
+        $this->deletePhoto($photoPath);
+
+        // رفع الصورة الجديدة وتخزين اسمها الجديد
+        $photoName = $this->uploadPhoto($request->image, 'products');
+        $data['image'] = $photoName;
+    }
+
+    // 3. تحديث البيانات في الداتابيز
+    Product::where('id', $id)->update($data);
+
+    // 4. إرجاع رد بصيغة JSON
+    return response()->json([
+        'success' => true,
+        'message' => "Product Updated Successfully"
+    ]);
+} // تأكد أن هذا هو قوس الإغلاق الوحيد للدالة
 
             function destroy($id){
                  //drlete photo from folder
@@ -95,7 +103,7 @@ class ProductController extends Controller
                 // DB::table('products')->where('id',$id)->delete();
                  Product ::where('id',$id)->delete();
 
-              return response()->json(['success' => true , 'message'=> "Product Deleted Successfuly"])            }
+              return response()->json(['success' => true , 'message'=> "Product Deleted Successfuly"]);            }
 
 
 }
