@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\traits\media;
+use App\Http\traits\ApiTrait;
 use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Subcategory;
@@ -14,27 +15,29 @@ use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
-    use media;
+    use media , ApiTrait;
 
     public function index(){
         $products = Product::all();
-        return response()->json(compact('products'),200);
+        // return response()->json(compact('products'),200);
+           return $this->data(compact('products'),200);
     }
 
 
     public function create(){
         $brands = Brand::all();
         $Subcategories = Subcategory::select('id','name_en')->get();
-        return response()->json(compact('brands', 'Subcategories'),200);
+        // return response()->json(compact('brands', 'Subcategories'),200);
+          return $this->data(compact('brands', 'Subcategories'),200);
     }
 
     public function edit($id){
         // $products = Product::where('id',$id)->first();
         $brands = Brand::all();
         $Subcategories = Subcategory::select('id','name_en')->get();
-        $products = Product::findOrFail($id);       //لو ما لقاها يرمي ايرور
+        $product = Product::findOrFail($id);       //لو ما لقاها يرمي ايرور
         // $products = Product::find($id);
-        return response()->json(compact('brands', 'Subcategories', 'product'), 200);
+        return $this->data(compact('brands', 'Subcategories', 'product'), 200);
       }        //فايند يعني واحد بس
 
             function store(StoreProductRequest $request){
@@ -55,14 +58,14 @@ class ProductController extends Controller
                     $data =$request->except('image');
                     $data['image'] = $photoName;
                 Product::create($data);
-                return response()->json(['success' => true , 'message'=> "product created successfuly"]);
-            }
+                return $this->SuccessMessage("product created successfuly",201);  //201 خاصة بان الكريت تم بنجاح       
+             }
 
 
 
  //الريكويست هيستقبل ايه ريكويست سواء جيت او بوست او اين كان وعلشان هوا كلاس علشان اتعامل معاه لازم اخد منه اوبجكت
      public function update(UpdateProductRequest $request, $id)
-{
+    {
     // 1. استثناء الصورة مؤقتاً من البيانات
     $data = $request->except('_method', 'image');
 
@@ -87,15 +90,16 @@ class ProductController extends Controller
     Product::where('id', $id)->update($data);
 
     // 4. إرجاع رد بصيغة JSON
-    return response()->json([
-        'success' => true,
-        'message' => "Product Updated Successfully"
-    ]);
-} // تأكد أن هذا هو قوس الإغلاق الوحيد للدالة
+    return $this->SuccessMessage( "Product Updated Successfully" );
+    } // تأكد أن هذا هو قوس الإغلاق الوحيد للدالة
 
             function destroy($id){
                  //drlete photo from folder
                 //   $oldPhotoName = DB::table('products')->select('image')->where('id',$id)->first()->image;
+
+            $product = Product::find($id);
+
+            if($product){
                   $oldPhotoName = Product::find($id)->image;
                   $photoPath =public_path('/dist/image/products/').$oldPhotoName;
                   $this->deletePhoto($photoPath);
@@ -103,7 +107,10 @@ class ProductController extends Controller
                 // DB::table('products')->where('id',$id)->delete();
                  Product ::where('id',$id)->delete();
 
-              return response()->json(['success' => true , 'message'=> "Product Deleted Successfuly"]);            }
+              return $this->SuccessMessage("Product Deleted Successfuly");            
+            }else{
+                    return $this->ErrorMessage(['id'=>'the id is invalid'],"Product id is invalid",422);  //422 دي بتاعت الفالديشن ايرور            
 
+            }
 
-}
+} }
