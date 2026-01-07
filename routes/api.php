@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Apis\Auth\RegisterController;
+use App\Http\Controllers\Apis\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Apis\ProductController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +36,9 @@ Route::group(['prefix' => 'products'],function () {
   Route::post('store',[ProductController::class,'store']);
   Route::post('update/{id}',[ProductController::class,'update']);
   Route::post('destroy/{id}',[ProductController::class,'destroy']);
+});
+
+
+Route::group(['prefix' => 'users'],function () {
+    Route::get('register',RegisterController::class);
 });
