@@ -40,5 +40,5 @@ Route::group(['prefix' => 'products'],function () {
 
 
 Route::group(['prefix' => 'users'],function () {
-    Route::get('register',RegisterController::class);
+    Route::post('register',RegisterController::class);
 });
