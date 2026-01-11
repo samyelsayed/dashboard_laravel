@@ -52,4 +52,5 @@ Route::group(['prefix' => 'users'],function () {
 Route::middleware('auth:sanctum')->group(function () {
     // أي Route هنا هيعرف يقرأ التوكن ويجيب اليوزر
     Route::post('auth/send-code', [EmailVerificationController::class, 'sendCode']);
+    Route::post('auth/check-code', [EmailVerificationController::class, 'checkCode']);
 });
