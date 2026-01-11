@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Apis\Auth\EmailVerificationController;
 use App\Http\Controllers\Apis\Auth\RegisterController;
 use App\Http\Controllers\Apis\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 
 /*
@@ -41,4 +43,13 @@ Route::group(['prefix' => 'products'],function () {
 
 Route::group(['prefix' => 'users'],function () {
     Route::post('register',RegisterController::class);
+    // Route::post('send-code',[EmailVerificationController::class,'sendCode']);
+});
+
+
+
+// api.php
+Route::middleware('auth:sanctum')->group(function () {
+    // أي Route هنا هيعرف يقرأ التوكن ويجيب اليوزر
+    Route::post('auth/send-code', [EmailVerificationController::class, 'sendCode']);
 });
