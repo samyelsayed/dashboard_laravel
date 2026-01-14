@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\Apis\Auth\EmailVerificationController;
-use App\Http\Controllers\Apis\Auth\RegisterController;
-use App\Http\Controllers\Apis\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Apis\ProductController;
+use App\Http\Controllers\Apis\Auth\LoginController;
+use App\Http\Controllers\Apis\Auth\RegisterController;
+use App\Http\Controllers\Apis\Auth\EmailVerificationController;
 
 
 
@@ -14,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:sanctum');
 
 // جرب إضافة هذا المسار للتأكد من عمل الـ API
 Route::get('/test', function () {
@@ -43,14 +44,17 @@ Route::group(['prefix' => 'products'],function () {
 
 Route::group(['prefix' => 'users'],function () {
     Route::post('register',RegisterController::class);
+    Route::post('login', [LoginController::class,'login']);
+
     // Route::post('send-code',[EmailVerificationController::class,'sendCode']);
 });
 
-
-
-// api.php
-Route::middleware('auth:sanctum')->group(function () {
+// Route::middleware(['auth:sanctum'])->group(['prefix'=>'auth'], function () {
+Route::middleware(['auth:sanctum'])->prefix('auth')->group(function () {
     // أي Route هنا هيعرف يقرأ التوكن ويجيب اليوزر
-    Route::post('auth/send-code', [EmailVerificationController::class, 'sendCode']);
-    Route::post('auth/check-code', [EmailVerificationController::class, 'checkCode']);
+    Route::post('send-code', [EmailVerificationController::class,'sendCode']);
+    Route::post('check-code', [EmailVerificationController::class,'checkCode']);
+    Route::delete('logout', [LoginController::class,'logout']);
+    Route::delete('logout-all-devices', [LoginController::class,'logoutAllDevices']);
+
 });
