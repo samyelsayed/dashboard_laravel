@@ -11,11 +11,17 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->api(append: [
-        \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-    ]);
-    })
+        ->withMiddleware(function (Middleware $middleware) {
+            // 1. إضافة الميدل وير الخاص بـ Sanctum لمجموعة الـ API
+            $middleware->api(append: [
+                \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            ]);
+
+            // 2. تعريف الاسم المستعار (Alias) للميدل وير بتاعك
+            $middleware->alias([
+                'UserVerifeid' => \App\Http\Middleware\UserVerifeid::class,
+            ]);
+        })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

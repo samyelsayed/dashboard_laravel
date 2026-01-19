@@ -17,7 +17,7 @@ class EmailVerificationController extends Controller
        //get user
        $authenticatedUser = Auth::guard('sanctum')->user(); // دايما بجيب اليوزر الي عامل اوثنتيكيشن بالتوكن الي بعتة في الهيدر
           // dd($authenticatedUser);
-          $code = rand(10000, 99999); // generate a random 4-digit code
+          $code = rand(10000, 99999); // generate a random 5-digit code
 
         $code_expired_at = now()->addMinutes(2);   // code expiration time set to 2 minutes from now
 
@@ -29,15 +29,24 @@ class EmailVerificationController extends Controller
         $user->save();
           $user->token =  $token;
         return $this->Data(compact('user'));
-      
+
     }
       public function checkCode(CheckCodeRequest $request){
         $token = $request->header('Authorization'); // get token from request header
         $authenticatedUser = Auth::guard('sanctum')->user(); // دايما بجيب اليوزر الي عامل اوثنتيكيشن بالتوكن الي بعتة في الهيدر
         $user = User::find($authenticatedUser->id); //دا كدا اوبكت شايل اليوزر من الداتا بيز
-      // if($user-> code == $request-> code &&$user-> code_expired_a < data('y-m-d H:i:s')){}
-      if($user-> code == $request-> code &&$user->code_expired_at->gt(now())){}
-      
-      
+
+        // if($user-> code == $request-> code &&$user-> code_expired_a < data('y-m-d H:i:s')){}
+      if($user-> code == $request-> code &&$user->code_expired_at->gt(now())){
+         $user->email_verified_at = now(); // لو الكود صح و مش منتهي بحدث حقل التايم ستام بتاع الايميل فيرفيد ات
+         $user->save();
+         $user->token =  $token;
+         return $this->Data(compact('user'));
+         }else{
+            $user->token =  $token;
+            return $this->Data(compact('user'),'Code is invalid or expired',422);
+      }
+
+
       }
 }
