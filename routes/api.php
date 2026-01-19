@@ -32,7 +32,7 @@ Route::get('/test', function () {
 // });
 
 
-Route::group(['prefix' => 'products'],function () {
+Route::group(['prefix' => 'products','middleware'=>'auth:sanctum', 'UserVerifeid'],function () {
   Route::get('/',[ProductController::class,'index']);
   Route::get('create',[ProductController::class,'create']);
   Route::get('edit/{id}',[ProductController::class,'edit']);
