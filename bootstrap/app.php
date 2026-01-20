@@ -20,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
             // 2. تعريف الاسم المستعار (Alias) للميدل وير بتاعك
             $middleware->alias([
                 'UserVerifeid' => \App\Http\Middleware\UserVerifeid::class,
+                'lang' => \App\Http\Middleware\Language::class
             ]);
         })
     ->withExceptions(function (Exceptions $exceptions): void {

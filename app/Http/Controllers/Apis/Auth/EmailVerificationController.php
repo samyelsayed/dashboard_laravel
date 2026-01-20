@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Http\Controllers\Apis\Auth;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CheckCodeRequest;
-use App\Http\traits\ApiTrait;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\traits\ApiTrait;
+use App\Mail\EmailVerification;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\CheckCodeRequest;
 
 
 class EmailVerificationController extends Controller
@@ -28,6 +30,8 @@ class EmailVerificationController extends Controller
         $user->code_expired_at = $code_expired_at;
         $user->save();
           $user->token =  $token;
+          // Send the code to the user's email
+          Mail::to($user)->send(new EmailVerification($user));
         return $this->Data(compact('user'));
 
     }
