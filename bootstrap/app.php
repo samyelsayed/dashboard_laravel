@@ -13,8 +13,15 @@ return Application::configure(basePath: dirname(__DIR__))
     )
         ->withMiddleware(function (Middleware $middleware) {
             // 1. إضافة الميدل وير الخاص بـ Sanctum لمجموعة الـ API
+            // $middleware->api(append: [
+            //     \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            // ]);
+            // $middleware->api(append: [
+            // \App\Http\Middleware\Language::class,
+            // ]);
             $middleware->api(append: [
-                \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            \App\Http\Middleware\Language::class,
             ]);
 
             // 2. تعريف الاسم المستعار (Alias) للميدل وير بتاعك

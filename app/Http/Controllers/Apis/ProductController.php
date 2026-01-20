@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Apis;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Http\traits\media;
 use App\Http\traits\ApiTrait;
+use App\Http\traits\media;
 use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
@@ -18,7 +19,10 @@ class ProductController extends Controller
     use media , ApiTrait;
 
     public function index(){
-        $products = Product::all();
+        // $products = Product::all();
+           $language = App::getLocale();
+           $products = Product::select('id','name_'.$language. ' AS name','desc_'.$language. ' AS desc')->get();
+
         // return response()->json(compact('products'),200);
            return $this->data(compact('products'),200);
     }
