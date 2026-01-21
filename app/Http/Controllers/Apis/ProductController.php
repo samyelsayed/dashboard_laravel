@@ -24,7 +24,7 @@ class ProductController extends Controller
            $products = Product::select('id','name_'.$language. ' AS name','desc_'.$language. ' AS desc')->get();
 
         // return response()->json(compact('products'),200);
-           return $this->data(compact('products'),200);
+           return $this->data(compact('products'),__('message.all'),200);
     }
 
 
@@ -62,7 +62,7 @@ class ProductController extends Controller
                     $data =$request->except('image');
                     $data['image'] = $photoName;
                 Product::create($data);
-                return $this->SuccessMessage("product created successfuly",201);  //201 خاصة بان الكريت تم بنجاح       
+                return $this->SuccessMessage("product created successfuly",201);  //201 خاصة بان الكريت تم بنجاح
              }
 
 
@@ -111,9 +111,9 @@ class ProductController extends Controller
                 // DB::table('products')->where('id',$id)->delete();
                  Product ::where('id',$id)->delete();
 
-              return $this->SuccessMessage("Product Deleted Successfuly");            
+              return $this->SuccessMessage("Product Deleted Successfuly");
             }else{
-                    return $this->ErrorMessage(['id'=>'the id is invalid'],"Product id is invalid",422);  //422 دي بتاعت الفالديشن ايرور            
+                    return $this->ErrorMessage(['id'=>'the id is invalid'],"Product id is invalid",422);  //422 دي بتاعت الفالديشن ايرور
 
             }
 
