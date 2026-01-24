@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Apis\ProductController;
 use App\Http\Controllers\Apis\Auth\LoginController;
 use App\Http\Controllers\Apis\Auth\RegisterController;
+use App\Http\Controllers\Apis\Auth\ForgotPasswordController;
 use App\Http\Controllers\Apis\Auth\EmailVerificationController;
 
 
@@ -58,3 +59,6 @@ Route::middleware(['auth:sanctum'])->prefix('auth')->group(function () {
     Route::delete('logout-all-devices', [LoginController::class,'logoutAllDevices']);
 
 });
+
+
+    Route::post('password/send-code', [ForgotPasswordController::class,'sendCode']);
