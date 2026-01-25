@@ -49,6 +49,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'code_expired_at' => 'datetime'
+            
         ];
     }
 }

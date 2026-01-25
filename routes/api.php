@@ -61,4 +61,10 @@ Route::middleware(['auth:sanctum'])->prefix('auth')->group(function () {
 });
 
 
-    Route::post('password/send-code', [ForgotPasswordController::class,'sendCode']);
+
+    Route::group(['prefix' => 'users/password'],function () {
+    Route::post('/send-code', [ForgotPasswordController::class,'sendCode']);
+    Route::post('/check-code', [ForgotPasswordController::class,'checkCode']);
+
+    // Route::post('send-code',[EmailVerificationController::class,'sendCode']);
+});
