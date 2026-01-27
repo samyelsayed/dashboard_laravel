@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Http\Requests\Apis\Auth;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class ResetPasswordRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+public function rules(): array
+    {
+        return [
+            'email' => ['required', 'email', 'exists:users,email'],
+            'password' => [
+                'required',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/'
+            ],
+            'reset_token' => ['required', 'string'] // هنا كان فيه نقص في علامة التنصيص وقوس المصفوفة
+        ];
+    }
+}
